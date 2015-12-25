@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -30,7 +31,9 @@
 			<Add library="sfml-system" />
 			<Add directory="../SFML/lib" />
 		</Linker>
+		<Unit filename="include/Sistem_Baza.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Sistem_Baza.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
