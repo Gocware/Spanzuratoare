@@ -121,7 +121,43 @@ unsigned Lista_Utilizatori ::nrUtilizatori()
     }
     return nr_Util;
 }
+Lista_Utilizatori::~Lista_Utilizatori()
+{
+    Date_Utilizator *parcurs = inceput;
+    while(parcurs->urmatorul)
+    {
+        Date_Utilizator *parcurs_copie = parcurs->urmatorul;
+        delete parcurs;
+        parcurs = parcurs_copie;
+    }
+}
 Date_Utilizator :: Date_Utilizator()
 {
     urmatorul = 0;
+}
+int Joc::formeazaJoc(char categ_param[100], ifstream&fisier)
+{
+    Sectiune_Text_Lista paragraf;
+    Sistem_Baza::scrieParagraf(fisier,categ_param,paragraf);
+    strcpy(categorie,categ_param);
+    unsigned maxim = paragraf.nrElemente();
+    unsigned cuvantRandom = (rand()%maxim) + 1;
+    paragraf.gasesteText(cuvantRandom,string_curent);
+    return 1;
+}
+void Lista_Utilizatori::scrieListaInFisier(ofstream &fisier)
+{
+    Date_Utilizator *parcurgere = inceput;
+    char delimParagraf[100];
+    strcpy(delimParagraf,inceput->nume);
+    fisier<<delimParagraf<<'\n';
+    while(parcurgere->urmatorul)
+    {
+        fisier<<"Rang Utilizator : "<<parcurgere->rang<<'\n';
+        fisier<<"NV : "<<parcurgere->nrVictorii<<'\n';
+        fisier<<"NP : "<<parcurgere->nrPierderi<<'\n';
+        // Acum urmeaza sa scriem detaliile jocurilor curente
+        parcurgere = parcurgere->urmatorul;
+    }
+    fisier<<delimParagraf<<'\n';
 }

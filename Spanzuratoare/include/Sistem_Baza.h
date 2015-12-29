@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <cstdlib>
 using namespace std;
 class Sectiune_Text
 {
@@ -31,14 +32,12 @@ class Sistem_Baza
         static void scrieParagraf(ifstream &fisier, char delimitare[20], Sectiune_Text_Lista &lista); // Implementat
     private:
         static char utilizator_curent[100];
-        static Sectiune_Text_Lista lista_utilizatori;
 };
 class Joc
 {
     public :
-        Joc();
-        void formeazaJoc(char categ_param[100]);
-        void actualizare(char mesaj);
+        int formeazaJoc(char categ_param[100], ifstream&fisier); // Implementat
+        void actualizareInteractiuneJucator(char mesaj);
         void reset();
     private :
         char categorie[100];
@@ -47,18 +46,22 @@ class Joc
 class Date_Utilizator
 {
      public :
-         Date_Utilizator();
-         char nume[100];
-         Joc joc_curent;
-         void formareUtilizator(char nume_param[100], Joc &joc);
          Date_Utilizator *urmatorul;
+         int nrVictorii, nrPierderi;
+         char nume[100], rang[100];
+         Joc joc_curent;
+         Date_Utilizator();
+         void formareUtilizator(char nume_param[100], Joc &joc);
 };
 class Lista_Utilizatori
 {
      public :
-         Lista_Utilizatori();
+         Lista_Utilizatori(); // Implementat
+         ~Lista_Utilizatori(); // Implementat
          Date_Utilizator *inceput, *travers;
          void adauga(Date_Utilizator utilizator_nou); // Implementat
+         void scrieListaInFisier(ofstream &fisier);
+         void initializeazaListaDinFisier();
          Date_Utilizator *gaseste_utilizator(char nume[100]); // Implementat
          unsigned nrUtilizatori(); // Implementat
 };
