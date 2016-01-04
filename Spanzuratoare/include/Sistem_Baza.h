@@ -1,9 +1,11 @@
 #ifndef SISTEM_BAZA_H
 #define SISTEM_BAZA_H
+
 #include <iostream>
 #include <fstream>
 #include <cstring>
 #include <cstdlib>
+
 using namespace std;
 class Sectiune_Text
 {
@@ -47,7 +49,8 @@ class Date_Utilizator
 {
      public :
          Date_Utilizator *urmatorul;
-         int nrVictorii, nrPierderi;
+         int nrVictorii, nrPierderi, jocuriActive;
+         int indice;
          char nume[100], rang[100];
          Joc joc_curent;
          Date_Utilizator();
@@ -61,8 +64,8 @@ class Lista_Utilizatori
          Date_Utilizator *inceput, *travers;
          void adauga(Date_Utilizator utilizator_nou); // Implementat
          void scrieListaInFisier(ofstream &fisier);
-         void initializeazaListaDinFisier();
-         Date_Utilizator *gaseste_utilizator(char nume[100]); // Implementat
+         void initializeazaListaDinFisier(ifstream &fisier);
+         Date_Utilizator *gaseste_utilizator(int poz); // Implementat
          unsigned nrUtilizatori(); // Implementat
 };
 #endif // SISTEM_BAZA_H

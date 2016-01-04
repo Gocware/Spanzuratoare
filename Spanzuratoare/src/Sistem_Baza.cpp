@@ -78,38 +78,56 @@ void Sectiune_Text_Lista::gasesteText(unsigned indice_cautare, char text[100])
 }
 void Sectiune_Text_Lista::stergeLista()
 {
-    Sectiune_Text *parcurgere = inceput;
-    while(parcurgere->urmatorul)
+    if(inceput != 0)
     {
-        Sectiune_Text *ptr_copie = parcurgere->urmatorul;
-        delete parcurgere;
-        parcurgere = ptr_copie;
+        Sectiune_Text *parcurgere = inceput;
+        while(parcurgere->urmatorul)
+        {
+            Sectiune_Text *ptr_copie = parcurgere->urmatorul;
+            delete parcurgere;
+            parcurgere = ptr_copie;
+        }
     }
 }
 Lista_Utilizatori :: Lista_Utilizatori()
 {
     travers = 0;
+    inceput = 0;
 }
 void Lista_Utilizatori :: adauga(Date_Utilizator utilizator_nou)
 {
     if(travers == 0)
     {
-        travers = &utilizator_nou;
+        travers = new Date_Utilizator();
+        strcpy(travers->nume,utilizator_nou.nume);
+        strcpy(travers->rang,utilizator_nou.rang);
+        travers->nrVictorii = utilizator_nou.nrVictorii;
+        travers->nrPierderi = utilizator_nou.nrPierderi;
+        travers->indice = 1;
         inceput = travers;
     }
     else
     {
+        int indice = travers->indice;
         while(travers->urmatorul)
+        {
             travers = travers->urmatorul;
-        travers->urmatorul = &utilizator_nou;
+            ++indice;
+        }
+        travers->urmatorul = new Date_Utilizator();
+        strcpy(travers->urmatorul->nume,utilizator_nou.nume);
+        strcpy(travers->urmatorul->rang,utilizator_nou.rang);
+        travers->urmatorul->nrVictorii = utilizator_nou.nrVictorii;
+        travers->urmatorul->nrPierderi = utilizator_nou.nrPierderi;
+        travers->urmatorul->indice = indice+1;
     }
 }
-Date_Utilizator *Lista_Utilizatori :: gaseste_utilizator(char nume[100])
+Date_Utilizator *Lista_Utilizatori :: gaseste_utilizator(int poz)
 {
     Date_Utilizator *verificare = inceput;
-    while(verificare->urmatorul && verificare->urmatorul->nume != nume)
+    while(verificare && verificare->indice != poz)
         verificare = verificare->urmatorul;
-    return verificare->urmatorul;
+    return verificare;
 }
 unsigned Lista_Utilizatori ::nrUtilizatori()
 {
@@ -123,27 +141,16 @@ unsigned Lista_Utilizatori ::nrUtilizatori()
 }
 Lista_Utilizatori::~Lista_Utilizatori()
 {
-    Date_Utilizator *parcurs = inceput;
-    while(parcurs->urmatorul)
+    if(inceput != 0)
     {
-        Date_Utilizator *parcurs_copie = parcurs->urmatorul;
-        delete parcurs;
-        parcurs = parcurs_copie;
+        Date_Utilizator *parcurs = inceput;
+        while(parcurs->urmatorul)
+        {
+           Date_Utilizator *parcurs_copie = parcurs->urmatorul;
+           delete parcurs;
+           parcurs = parcurs_copie;
+        }
     }
-}
-Date_Utilizator :: Date_Utilizator()
-{
-    urmatorul = 0;
-}
-int Joc::formeazaJoc(char categ_param[100], ifstream&fisier)
-{
-    Sectiune_Text_Lista paragraf;
-    Sistem_Baza::scrieParagraf(fisier,categ_param,paragraf);
-    strcpy(categorie,categ_param);
-    unsigned maxim = paragraf.nrElemente();
-    unsigned cuvantRandom = (rand()%maxim) + 1;
-    paragraf.gasesteText(cuvantRandom,string_curent);
-    return 1;
 }
 void Lista_Utilizatori::scrieListaInFisier(ofstream &fisier)
 {
@@ -160,4 +167,24 @@ void Lista_Utilizatori::scrieListaInFisier(ofstream &fisier)
         parcurgere = parcurgere->urmatorul;
     }
     fisier<<delimParagraf<<'\n';
+}
+void Lista_Utilizatori::initializeazaListaDinFisier(ifstream &fisier)
+{
+    Date_Utilizator utilizator;
+    while(fisier>>utilizator.nume && fisier>>utilizator.rang && fisier>>utilizator.nrVictorii && fisier>>utilizator.nrPierderi)
+          adauga(utilizator);
+}
+int Joc::formeazaJoc(char categ_param[100], ifstream&fisier)
+{
+    Sectiune_Text_Lista paragraf;
+    Sistem_Baza::scrieParagraf(fisier,categ_param,paragraf);
+    strcpy(categorie,categ_param);
+    unsigned maxim = paragraf.nrElemente();
+    unsigned cuvantRandom = (rand()%maxim) + 1;
+    paragraf.gasesteText(cuvantRandom,string_curent);
+    return 1;
+}
+Date_Utilizator :: Date_Utilizator()
+{
+    urmatorul = 0;
 }

@@ -31,8 +31,15 @@
 			<Add library="sfml-system" />
 			<Add directory="../SFML/lib" />
 		</Linker>
+		<Unit filename="include/Buton.h" />
+		<Unit filename="include/Comunicare.h" />
+		<Unit filename="include/Grafica.h" />
 		<Unit filename="include/Sistem_Baza.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Buton.cpp" />
+		<Unit filename="src/Comunicare.cpp" />
+		<Unit filename="src/Grafica.cpp" />
+		<Unit filename="src/Profil_GX.cpp" />
 		<Unit filename="src/Sistem_Baza.cpp" />
 		<Extensions>
 			<code_completion />
